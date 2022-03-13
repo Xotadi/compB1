@@ -4,14 +4,11 @@
 #include <vector>
 #include <math.h>
 #include <string>
-#include <filesystem>
-
 
 #include "DLASystem.h"
-#include "Window.h"
+#include "Window.h" 
 
 using namespace std;
-namespace fs = std::filesystem;
 
 // functions which are needed for openGL go into a namespace so that we can identify them
 namespace drawFuncs {
@@ -36,19 +33,19 @@ int main(int argc, char **argv) {
 
   // create the system
   sys = new DLASystem(win);
-
+  
   // this is the seed for the random numbers
   int seed = 6;
   cout << "setting seed " << seed << endl;
   sys->setSeed(seed);
-
+  
   // print the "help" message to the console
   drawFuncs::introMessage();
-
+  
   // tell openGL how to redraw the screen and respond to the keyboard
 	glutDisplayFunc(  drawFuncs::display );
 	glutKeyboardFunc( drawFuncs::handleKeypress );
-
+  
   // tell openGL to do its first update after waiting 10ms
   int wait = 10;
   int val = 0;
@@ -72,7 +69,6 @@ void drawFuncs::introMessage() {
         cout << "  r to clear everything (reset)" << endl;
         cout << "  z to pause and zoom in" << endl;
         cout << "  w or b to change background colour to white or black" << endl;
-        cout << "  0 to print size and number of particles" << endl;
 }
 
 // openGL function deals with the keyboard
@@ -92,22 +88,11 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
     cout << "pause" << endl;
     sys->pauseRunning();
     break;
-  case 'g':{
+  case 'g':
     cout << "go" << endl;
-    int fileNum = 0;
-    fs::path checkF;
-    bool ex;
-    do{
-        fileNum++;
-        sys->filename = "";
-        sys->filename.append("fractDim").append(to_string(fileNum)).append(".csv");
-        fs::path checkF{sys->filename};
-        ex = fs::exists(checkF);
-    }while (ex);
     sys->setRunning();
     glutTimerFunc(0, drawFuncs::update, 0);
     break;
-  }
   case 's':
     cout << "slow" << endl;
     sys->setSlow();
@@ -137,10 +122,6 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
     cout << "upd" << endl;
     sys->Update();
     break;
-  case '0':
-    cout << "print size" << endl;
-    sys->printSize();
-    break;
 	}
   // tell openGL to redraw the window
 	glutPostRedisplay();
@@ -149,18 +130,19 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
 // this function gets called whenever the algorithm should do its update
 void drawFuncs::update(int val) {
   int wait;  // time to wait between updates (milliseconds)
-
-  if (( sys->running ) && (sys->numParticles < sys->endNum)) {
+  
+  if ( sys->running ) {
     if ( sys->slowNotFast == 1)
       wait = 10;
     else
       wait = 0;
-
+    
     sys->Update();
-
+  
     // tell openGL to call this funtion again after "wait" milliseconds
     glutTimerFunc(wait, drawFuncs::update, 0);
   }
+  
 }
 
 // this function redraws the window when necessary

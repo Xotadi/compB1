@@ -208,7 +208,10 @@ void DLASystem::moveLastParticle() {
 			//cout << "stick" << endl;
 			setParticleInactive();  // make the particle inactive (stuck)
 			updateClusterRadius(lastP->pos);  // update the cluster radius, addCircle, etc.
-            saveSize();
+
+			if (numParticles % 100 == 0 && logfile.is_open()) {
+				logfile << numParticles << " " << clusterRadius << endl;
+			}
 		}
 	}
 	else {
@@ -242,7 +245,7 @@ DLASystem::DLASystem(Window *set_win) {
 	cout << "creating system, gridSize " << gridSize << endl;
 	win = set_win;
 	numParticles = 0;
-	endNum = 1001;
+	endNum = 1000;
 
 	// allocate memory for the grid, remember to free the memory in destructor
 	grid = new int*[gridSize];
@@ -313,26 +316,4 @@ void DLASystem::DrawSquares() {
 		win->displayString(pauseStr, -0.9, -0.9, colours::red);
 	}
 
-}
-
-//print the size of the cluster and number of particles
-void DLASystem::printSize() {
-    cout << "Number of particles: " << numParticles << endl;
-    cout << "Cluster radius: " << clusterRadius << endl;
-}
-
-void DLASystem::saveSize() {
-    if (numParticles == 10){
-        ofstream makeCsvFile;
-        makeCsvFile.open(filename);
-        makeCsvFile << "Number Particles (N), Cluster Radius(R)" << endl;
-        makeCsvFile.close();
-    }
-
-    if ((numParticles == 10) || (numParticles % 100 == 0)){
-        ofstream csvFile;
-        csvFile.open(filename, std::ios_base::app);
-        csvFile << numParticles << "," << clusterRadius << endl;
-        csvFile.close();
-    }
 }
