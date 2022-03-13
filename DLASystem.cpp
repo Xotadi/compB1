@@ -226,7 +226,7 @@ int DLASystem::checkStick() {
 	Particle *lastP = particleList[numParticles - 1];
 	int result = 0;
 	double stickChance;
-	double stickProb = 0.05;
+	double stickProb = 0.01;
 	int pRange = 1000; //Must be greater than 1
 	prob=stickProb;
 	// loop over neighbours
@@ -332,6 +332,7 @@ void DLASystem::printSize() {
 }
 
 void DLASystem::saveSize() {
+    //Save cluster measurements to CSV file
     if (numParticles == 10){
         ofstream makeCsvFile;
         makeCsvFile.open(filename);
@@ -342,7 +343,7 @@ void DLASystem::saveSize() {
 
     if ((numParticles == 10) || (numParticles % 100 == 0)){
         ofstream csvFile;
-        csvFile.open(filename, std::ios_base::app);
+        csvFile.open(filename, std::ios_base::app); //Open file in append mode
         csvFile << numParticles << "," << clusterRadius << endl;
         csvFile.close();
     }
