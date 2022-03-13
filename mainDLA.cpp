@@ -5,6 +5,7 @@
 #include <math.h>
 #include <string>
 #include <filesystem>
+#include <ctime>
 
 
 #include "DLASystem.h"
@@ -38,7 +39,7 @@ int main(int argc, char **argv) {
   sys = new DLASystem(win);
 
   // this is the seed for the random numbers
-  int seed = 6;
+  int seed = time(NULL);
   cout << "setting seed " << seed << endl;
   sys->setSeed(seed);
 
