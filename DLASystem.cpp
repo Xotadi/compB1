@@ -226,15 +226,16 @@ int DLASystem::checkStick() {
 	Particle *lastP = particleList[numParticles - 1];
 	int result = 0;
 	double stickChance;
-	int stickProb = 500;
-	int pRange = 1000;
+	double stickProb = 0.05;
+	int pRange = 1000; //Must be greater than 1
+	prob=stickProb;
 	// loop over neighbours
 	for (int i = 0; i < 4; i++) {
 		double checkpos[2];
 		setPosNeighbour(checkpos, lastP->pos, i);
 		// if the neighbour is occupied...
 		if (readGrid(checkpos) == 1){
-			stickChance = (rgen.randomInt(pRange)+1.)/pRange;
+			stickChance = (rgen.randomInt(pRange)+1)/(double)pRange;
 			if (stickChance < stickProb){
                 result = 1;
 			}else{
@@ -334,6 +335,7 @@ void DLASystem::saveSize() {
     if (numParticles == 10){
         ofstream makeCsvFile;
         makeCsvFile.open(filename);
+        makeCsvFile << "Sticking chance: " << prob << endl;
         makeCsvFile << "Number Particles (N), Cluster Radius(R)" << endl;
         makeCsvFile.close();
     }

@@ -21,9 +21,9 @@ using namespace std;
 class DLASystem {
   private:
   // these are private variables and functions that the user will not see
-  
+
     Window *win;  // window in which the system is running
-  
+
     // list of particles
     vector<Particle*> particleList;
 
@@ -35,29 +35,29 @@ class DLASystem {
     // these are related to the DLA algorithm
     double addCircle;
     double killCircle;
-  
+
     // size of grid
     static const int gridSize = 1600;
     int **grid;  // this will be a 2d array that stores whether each site is occupied
-  
+
     // the window draws only part of the grid, viewSize controls how much...
     double viewSize;
     double drawScale;
-  
+
     // random number generator, class name is rnd, instance is rgen
     rnd rgen;
-  
+
     // output file (not used at the moment)
     ofstream logfile;
-  
+
     // number of particles at which the simulation will stop
     // (the value is set in constructor)
-  
+
     // the values of these variables are set in the constructor
     double addRatio;    // how much bigger the addCircle should be, compared to cluster radius
     double killRatio;   // how much bigger is the killCircle, compared to the addCircle
 
-  
+
   public:
   // these are public variables and functions
 
@@ -67,21 +67,21 @@ class DLASystem {
 
     // draw particles as squares
     void DrawSquares();
-  
+
     // is the simulation running (1) or paused (0) ?
     int running;
-  
+
     // slowNotFast is +1 for slow running, 0 for fast
     int slowNotFast;
 
     // lastParticleIsActive is +1 if there is an active particle in the system, otherwise 0
     int lastParticleIsActive;
-  
+
     // constructor
     DLASystem(Window *set_win);
     // destructor
     ~DLASystem();
-  
+
     // delete all particles and reset
     void Reset();
 
@@ -90,7 +90,7 @@ class DLASystem {
 
     // check whether we should stop (eg the cluster has reached the edge of the grid)
     int checkStop();
-  
+
     // stop/start the algorithm
     void setRunning() { if ( checkStop()==0 ) running = 1; }
     void pauseRunning() { running = 0; }
@@ -103,7 +103,7 @@ class DLASystem {
     // basically the screen shows co-ordinates -vv < x < vv
     // where vv is the input value
     void setViewSize(double vv) { viewSize = vv; drawScale = 2.0/viewSize; }
-  
+
     // if the killcircle is almost as big as the view then increase the view
     void updateViewSize();
 
@@ -154,4 +154,5 @@ class DLASystem {
     string filename;
     int numParticles;
     int endNum;
+    double prob;
 };
