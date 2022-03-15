@@ -209,8 +209,8 @@ void DLASystem::moveLastParticle() {
 			setParticleInactive();  // make the particle inactive (stuck)
 			updateClusterRadius(lastP->pos);  // update the cluster radius, addCircle, etc.
             saveSize();
-		}
-	}
+        }
+}
 	else {
 		// if we get to here then we are trying to move to an occupied site
 		// (this should never happen as long as the sticking probability is 1.0)
@@ -218,6 +218,12 @@ void DLASystem::moveLastParticle() {
 		cout << lastP->pos[0] << " " << lastP->pos[1] << endl;
 		//cout << newpos[0] << " " << newpos[1] << " " << (int)newpos[0] << endl;
 		//printOccupied();
+		if (delNoStick){
+            setGrid(lastP->pos, 0);
+            particleList.pop_back();  // remove particle from particleList
+            numParticles--;
+            setParticleInactive();
+		}
 	}
 }
 
@@ -226,7 +232,7 @@ int DLASystem::checkStick() {
 	Particle *lastP = particleList[numParticles - 1];
 	int result = 0;
 	double stickChance;
-	double stickProb = 0.01;
+	double stickProb = 0.75;
 	int pRange = 1000; //Must be greater than 1
 	prob=stickProb;
 	// loop over neighbours
@@ -238,8 +244,6 @@ int DLASystem::checkStick() {
 			stickChance = (rgen.randomInt(pRange)+1)/(double)pRange;
 			if (stickChance < stickProb){
                 result = 1;
-			}else{
-			result = 0;
 			}
 		}
 	}

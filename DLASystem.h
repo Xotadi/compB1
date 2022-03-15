@@ -155,4 +155,5 @@ class DLASystem {
     int numParticles;
     int endNum;
     double prob;
+    bool delNoStick = false;
 };

@@ -74,6 +74,7 @@ void drawFuncs::introMessage() {
         cout << "  z to pause and zoom in" << endl;
         cout << "  w or b to change background colour to white or black" << endl;
         cout << "  0 to print size and number of particles" << endl;
+        cout << "  n to delete particle after unsuccessful stick" << endl;
 }
 
 // openGL function deals with the keyboard
@@ -141,6 +142,10 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
   case '0':
     cout << "print size" << endl;
     sys->printSize();
+    break;
+  case 'n':
+    cout << "delete on no stick" << endl;
+    sys->delNoStick = true;
     break;
 	}
   // tell openGL to redraw the window
