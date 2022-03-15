@@ -156,4 +156,6 @@ class DLASystem {
     int endNum;
     double prob;
     bool delNoStick = false;
+    bool diagonalStick = false;
+    double stickProb = 1.;
 };

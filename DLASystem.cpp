@@ -141,6 +141,24 @@ void DLASystem::setPosNeighbour(double setpos[], double pos[], int val) {
 		setpos[0] = pos[0];
 		setpos[1] = pos[1] - 1.0;
 		break;
+    if (diagonalStick){
+    case 4:
+        setpos[0] = pos[0] + 1.0;
+		setpos[1] = pos[1] + 1.0;
+		break;
+    case 5:
+        setpos[0] = pos[0] + 1.0;
+		setpos[1] = pos[1] - 1.0;
+		break;
+    case 6:
+        setpos[0] = pos[0] - 1.0;
+		setpos[1] = pos[1] + 1.0;
+		break;
+    case 7:
+        setpos[0] = pos[0] - 1.0;
+		setpos[1] = pos[1] - 1.0;
+		break;
+    }
 	}
 }
 
@@ -181,7 +199,12 @@ void DLASystem::updateClusterRadius(double pos[]) {
 
 // make a random move of the last particle in the particleList
 void DLASystem::moveLastParticle() {
-	int rr = rgen.randomInt(4);  // pick a random number in the range 0-3, which direction do we hop?
+    int rr;
+    if (diagonalStick){
+        rr = rgen.randomInt(8);
+    } else {
+        rr = rgen.randomInt(4);  // pick a random number in the range 0-3, which direction do we hop?
+    }
 	double newpos[2];
 
 	Particle *lastP = particleList[numParticles - 1];
@@ -232,11 +255,16 @@ int DLASystem::checkStick() {
 	Particle *lastP = particleList[numParticles - 1];
 	int result = 0;
 	double stickChance;
-	double stickProb = 0.75;
 	int pRange = 1000; //Must be greater than 1
-	prob=stickProb;
+	int directions;
+
+	if (diagonalStick){
+        directions = 8;
+	}else{
+        directions = 4;
+	}
 	// loop over neighbours
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < directions; i++) {
 		double checkpos[2];
 		setPosNeighbour(checkpos, lastP->pos, i);
 		// if the neighbour is occupied...
@@ -340,7 +368,7 @@ void DLASystem::saveSize() {
     if (numParticles == 10){
         ofstream makeCsvFile;
         makeCsvFile.open(filename);
-        makeCsvFile << "Sticking chance: " << prob << endl;
+        makeCsvFile << "Sticking chance: " << stickProb << endl;
         makeCsvFile << "Number Particles (N), Cluster Radius(R)" << endl;
         makeCsvFile.close();
     }

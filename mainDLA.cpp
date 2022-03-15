@@ -75,6 +75,8 @@ void drawFuncs::introMessage() {
         cout << "  w or b to change background colour to white or black" << endl;
         cout << "  0 to print size and number of particles" << endl;
         cout << "  n to delete particle after unsuccessful stick" << endl;
+        cout << "  d to allow particles to stick diagonally as well as cardinally" << endl;
+        cout << "  v to adjust sticking probability" << endl;
 }
 
 // openGL function deals with the keyboard
@@ -144,8 +146,16 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
     sys->printSize();
     break;
   case 'n':
-    cout << "delete on no stick" << endl;
-    sys->delNoStick = true;
+    sys->delNoStick = not sys->delNoStick;
+    cout << "delete on no stick: " << sys->delNoStick << endl;
+    break;
+  case 'd':
+    sys->diagonalStick=not sys->diagonalStick;
+    cout << "diagonal stick: " << sys->diagonalStick << endl;
+    break;
+  case 'v':
+    cout << "Enter a probability between 0 and 1: ";
+    cin >> sys->stickProb;
     break;
 	}
   // tell openGL to redraw the window
