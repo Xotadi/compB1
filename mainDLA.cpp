@@ -77,6 +77,7 @@ void drawFuncs::introMessage() {
         cout << "  n to delete particle after unsuccessful stick" << endl;
         cout << "  d to allow particles to stick diagonally as well as cardinally" << endl;
         cout << "  v to adjust sticking probability" << endl;
+        cout << "  c to change minimum number of successful sticks required before particle stops" << endl;
 }
 
 // openGL function deals with the keyboard
@@ -102,6 +103,7 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
     fs::path checkF;
     bool ex;
     do{
+        //Ensures new file made each run so no data overwritten
         fileNum++;
         sys->filename = "";
         sys->filename.append("fractDim").append(to_string(fileNum)).append(".csv");
@@ -156,6 +158,10 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
   case 'v':
     cout << "Enter a probability between 0 and 1: ";
     cin >> sys->stickProb;
+    break;
+  case 'c':
+    cout << "Enter number of collisions before stick (min 1): ";
+    cin >> sys->minColls;
     break;
 	}
   // tell openGL to redraw the window

@@ -202,7 +202,7 @@ void DLASystem::moveLastParticle() {
     int rr;
     if (diagonalStick){
         rr = rgen.randomInt(8);
-    } else {
+    }else{
         rr = rgen.randomInt(4);  // pick a random number in the range 0-3, which direction do we hop?
     }
 	double newpos[2];
@@ -227,8 +227,9 @@ void DLASystem::moveLastParticle() {
 		setGrid(lastP->pos, 1);  // set the new grid site to be occupied
 
 		// check if we stick
-		if (checkStick()) {
+		if ((checkStick()) && (colls>=minColls)) {
 			//cout << "stick" << endl;
+			colls = 0;
 			setParticleInactive();  // make the particle inactive (stuck)
 			updateClusterRadius(lastP->pos);  // update the cluster radius, addCircle, etc.
             saveSize();
@@ -271,6 +272,7 @@ int DLASystem::checkStick() {
 		if (readGrid(checkpos) == 1){
 			stickChance = (rgen.randomInt(pRange)+1)/(double)pRange;
 			if (stickChance < stickProb){
+			    colls++;
                 result = 1;
 			}
 		}

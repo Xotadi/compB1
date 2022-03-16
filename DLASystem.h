@@ -158,4 +158,6 @@ class DLASystem {
     bool delNoStick = false;
     bool diagonalStick = false;
     double stickProb = 1.;
+    int minColls = 1;
+    int colls = 0;
 };
