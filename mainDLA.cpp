@@ -78,6 +78,7 @@ void drawFuncs::introMessage() {
         cout << "  d to allow particles to stick diagonally as well as cardinally" << endl;
         cout << "  v to adjust sticking probability" << endl;
         cout << "  c to change minimum number of successful sticks required before particle stops" << endl;
+        cout << "  m to simulate inter-molecular forces causing particles to attract" << endl;
 }
 
 // openGL function deals with the keyboard
@@ -163,6 +164,9 @@ void drawFuncs::handleKeypress(unsigned char key, int x, int y) {
     cout << "Enter number of collisions before stick (min 1): ";
     cin >> sys->minColls;
     break;
+  case 'm':
+    cout << "Enter the max separation for particle to be attracted (>=1, 0 disables): ";
+    cin >> sys->attrSeparation;
 	}
   // tell openGL to redraw the window
 	glutPostRedisplay();

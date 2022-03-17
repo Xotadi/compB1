@@ -201,6 +201,7 @@ void DLASystem::updateClusterRadius(double pos[]) {
 void DLASystem::moveLastParticle() {
     int rr;
     if (diagonalStick){
+        //8 possible directions to move in with diagonalStick enabled
         rr = rgen.randomInt(8);
     }else{
         rr = rgen.randomInt(4);  // pick a random number in the range 0-3, which direction do we hop?
@@ -209,7 +210,11 @@ void DLASystem::moveLastParticle() {
 
 	Particle *lastP = particleList[numParticles - 1];
 
-	setPosNeighbour(newpos, lastP->pos, rr);
+    if (attrSeparation > 0.9){
+        nearestNeighbour(newpos, lastP->pos, rr);
+    }else{
+        setPosNeighbour(newpos, lastP->pos, rr);
+    }
 
 	if (distanceFromOrigin(newpos) > killCircle) {
 		//cout << "#deleting particle" << endl;
@@ -240,9 +245,10 @@ void DLASystem::moveLastParticle() {
 		// (this should never happen as long as the sticking probability is 1.0)
 		cout << "reject " << rr << endl;
 		cout << lastP->pos[0] << " " << lastP->pos[1] << endl;
-		//cout << newpos[0] << " " << newpos[1] << " " << (int)newpos[0] << endl;
+		cout << newpos[0] << " " << newpos[1] << endl;
 		//printOccupied();
 		if (delNoStick){
+            // Delete particle when trying to move to occupied site instead of allowing it to continue
             setGrid(lastP->pos, 0);
             particleList.pop_back();  // remove particle from particleList
             numParticles--;
@@ -381,4 +387,39 @@ void DLASystem::saveSize() {
         csvFile << numParticles << "," << clusterRadius << endl;
         csvFile.close();
     }
+}
+
+void DLASystem::nearestNeighbour(double newPos[], double lastPos[], int rr) {
+    //Inefficient algorithm to (approximately) find closest point on cluster to moving particle
+    //More efficient implementation would require tree structure
+    double dist;
+    int x, y;
+
+    for (int k = numParticles - 2; k >= numParticles - 12; k--){
+        dist = sqrt(pow((particleList[k]->pos[0] - lastPos[0]), 2) + pow((particleList[k]->pos[1] - lastPos[1]), 2));
+        if (dist < attrSeparation){
+            x = particleList[k]->pos[0] - lastPos[0];
+            y = particleList[k]->pos[1] - lastPos[1];
+            newPos[0] = lastPos[0] + discretizeComponent(x/dist);
+            newPos[1] = lastPos[1] + discretizeComponent(y/dist);
+//            cout << "Trying to move: " << newPos[0] << "," << newPos[1] << endl;
+            return;
+        }
+    }
+//    cout << "No neighbour" << endl;
+    setPosNeighbour(newPos, lastPos, rr);
+}
+
+//Ensure movement towards nearest neighbour stays on grid
+double DLASystem::discretizeComponent(double vec) {
+    double discVec;
+
+    if (vec > 0.5){
+        discVec = 1;
+    }else if ((vec < 0.5) && (vec > -0.5)){
+        discVec = 0;
+    }else{
+        discVec = -1;
+    }
+    return discVec;
 }

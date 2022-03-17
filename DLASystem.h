@@ -151,6 +151,8 @@ class DLASystem {
     void setWinBackgroundBlack() { glClearColor(0.0, 0.0, 0.0, 0.0); }
     void printSize();
     void saveSize();
+    void nearestNeighbour(double newPos[], double lastPos[], int rr);
+    double discretizeComponent(double vec);
     string filename;
     int numParticles;
     int endNum;
@@ -160,4 +162,5 @@ class DLASystem {
     double stickProb = 1.;
     int minColls = 1;
     int colls = 0;
+    double attrSeparation = 0.;
 };
