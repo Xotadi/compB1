@@ -10,11 +10,11 @@
 
 CXX     = g++
 
-CXXFLAGS = -Wall -Wextra -g -O0 
+CXXFLAGS = -Wall -Wextra -g -O0 -std=c++17
 
 IFLAGS = -I/usr/local/include -I/usr/include
 
-LFLAGS = -L/usr/local/lib -lm -lGL -lGLU -lglut	
+LFLAGS = -L/usr/local/lib -lm -lGL -lGLU -lglut	-lstdc++fs
 
 # ------------------------------------------
 # FOR GENERIC MAKEFILE:
