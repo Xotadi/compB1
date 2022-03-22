@@ -373,18 +373,25 @@ void DLASystem::printSize() {
 
 void DLASystem::saveSize() {
     //Save cluster measurements to CSV file
+    double dist = 0.;
+    double rGyr = 0.;
+
+    for (int i=0; i<numParticles; i++){
+        dist += (pow((particleList[i]->pos[0]), 2) + pow((particleList[i]->pos[1]), 2));
+    }
+    rGyr = sqrt(dist/numParticles);
     if (numParticles == 10){
         ofstream makeCsvFile;
         makeCsvFile.open(filename);
         makeCsvFile << "Sticking chance: " << stickProb << endl;
-        makeCsvFile << "Number Particles (N), Cluster Radius(R)" << endl;
+        makeCsvFile << "Number Particles (N), Cluster Radius(R), Radius of Gyration" << endl;
         makeCsvFile.close();
     }
 
     if ((numParticles == 10) || (numParticles % 100 == 0)){
         ofstream csvFile;
         csvFile.open(filename, std::ios_base::app); //Open file in append mode
-        csvFile << numParticles << "," << clusterRadius << endl;
+        csvFile << numParticles << "," << clusterRadius << "," << rGyr << endl;
         csvFile.close();
     }
 }
@@ -395,7 +402,7 @@ void DLASystem::nearestNeighbour(double newPos[], double lastPos[], int rr) {
     double dist;
     int x, y;
 
-    for (int k = numParticles - 2; k >= numParticles - 12; k--){
+    for (int k = numParticles - 2; ((k >= numParticles - 12) && (k>=0)); k--){
         dist = sqrt(pow((particleList[k]->pos[0] - lastPos[0]), 2) + pow((particleList[k]->pos[1] - lastPos[1]), 2));
         if (dist < attrSeparation){
             x = particleList[k]->pos[0] - lastPos[0];
